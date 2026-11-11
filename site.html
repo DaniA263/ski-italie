@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ski Italie · 14–18 février 2027</title>
+<style>
+:root{--b:#0b3d6b;--a:#e8492f;--l:#f3f7fb}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Arial;background:var(--l);color:#1b2733}
+header{background:linear-gradient(135deg,#0b3d6b,#3a86c8);color:#fff;padding:40px 20px;text-align:center}
+header h1{margin:0;font-size:2.2em}nav{position:sticky;top:0;background:#fff;display:flex;gap:4px;justify-content:center;flex-wrap:wrap;padding:8px;box-shadow:0 2px 6px #0002;z-index:9}
+nav a{padding:8px 14px;border-radius:20px;text-decoration:none;color:var(--b);font-weight:600}nav a:hover{background:var(--l)}
+section{max-width:1150px;margin:auto;padding:30px 16px}h2{color:var(--b)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}select,input{padding:8px;border-radius:8px;border:1px solid #bcd}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px #0001}.card h3{margin:0 0 4px}
+.tag{display:inline-block;background:var(--l);color:var(--b);font-size:.8em;padding:3px 8px;border-radius:10px;margin:2px}
+.row{display:flex;justify-content:space-between;border-bottom:1px solid #eef;padding:5px 0;font-size:.93em}
+.btn{display:inline-block;margin:8px 6px 0 0;padding:7px 12px;border-radius:8px;background:var(--b);color:#fff;text-decoration:none;font-size:.85em;border:0;cursor:pointer}
+.btn.r{background:var(--a)}.wx{font-size:.85em;margin-top:8px;background:var(--l);border-radius:8px;padding:8px}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{padding:8px;border-bottom:1px solid #eef;text-align:left}
+.note{background:#fff7e0;border-left:4px solid #f0b400;padding:10px 14px;border-radius:6px;font-size:.9em}
+.total{font-size:1.6em;color:var(--a);font-weight:700}label{display:block;margin:8px 0}
+.check label{display:flex;gap:8px;align-items:center}footer{text-align:center;padding:20px;color:#678;font-size:.85em}
+</style><meta name="theme-color" content="#0b3d6b"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Ski Italie">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230b3d6b'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle'%3E%F0%9F%8E%BF%3C/text%3E%3C/svg%3E"><link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230b3d6b'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle'%3E%F0%9F%8E%BF%3C/text%3E%3C/svg%3E"><style>body{padding-top:env(safe-area-inset-top);-webkit-tap-highlight-color:transparent}@media(display-mode:standalone){header{padding-top:50px}}</style>
+</head><body>
+<header><h1>🎿 Ski en Italie</h1><p>Dimanche 14 → jeudi 18 février 2027 · 4 nuits · 4 à 5 jours de ski</p><p id="cd"></p></header>
+<nav><a href="#stations">Stations</a><a href="#meteo">Météo</a><a href="#budget">Budget</a><a href="#prog">Programme</a><a href="#groupe">Groupe</a><a href="#vote">Vote</a><a href="#depenses">Dépenses</a><a href="#voiture">Voiture</a><a href="#materiel">Matériel</a><a href="#carte">Carte</a><a href="#infos">Infos utiles</a><a href="#check">Valise</a></nav>
+
+<section id="stations"><h2>Les meilleures stations</h2>
+<div class="note">Les prix sont des <b>estimations</b> de haute saison (février) à vérifier : forfait 4 jours adulte et nuit Airbnb pour un logement 2–4 pers. proche des pistes. Les boutons ouvrent Airbnb déjà filtré sur tes dates.</div><br>
+<div class="filters"><select id="fz"><option value="">Toutes les régions</option></select>
+<select id="fs"><option value="note">Trier : meilleure note</option><option value="alt">Altitude (neige sûre)</option><option value="km">Km de pistes</option><option value="prix">Moins cher</option></select>
+<select id="fn"><option value="">Tous niveaux</option><option>Débutant</option><option>Intermédiaire</option><option>Expert</option></select></div>
+<div class="grid" id="grid"></div></section>
+
+<section id="meteo"><h2>Météo sur les pistes</h2>
+<p>Prévisions en direct au sommet de chaque station (source Open-Meteo, 7 jours). Les vraies prévisions pour tes dates seront fiables à partir du ~4 février ; en attendant, voici les normales de février.</p>
+<button class="btn r" onclick="loadAll()">Charger la météo en direct de toutes les stations</button>
+<table id="wt"><tr><th>Station</th><th>Normales février (sommet)</th><th>Neige</th><th>Prévision live</th></tr></table></section>
+
+<section id="budget"><h2>Calculateur de budget</h2><div class="grid"><div class="card">
+<label>Station <select id="bs"></select></label>
+<label>Personnes <input id="bp" type="number" value="5" min="1"></label>
+<label>Jours de ski <input id="bj" type="number" value="4" min="1" max="5"></label>
+<label>Vol A/R par pers. (€) <input id="bv" type="number" value="250"></label>
+<label>Location matériel/jour/pers. (€) <input id="bm" type="number" value="35"></label>
+<label>Repas/jour/pers. (€) <input id="br" type="number" value="55"></label>
+<label>Transfert aéroport total (€) <input id="bt" type="number" value="200"></label></div>
+<div class="card"><h3>Total estimé</h3><div id="bd"></div><p class="total" id="btot"></p><p id="bpp"></p></div></div></section>
+
+<section id="prog"><h2>Programme type</h2><table>
+<tr><th>Jour</th><th>Plan</th></tr>
+<tr><td>Dim 14</td><td>Vol vers Milan (MXP/BGY/LIN), Turin, Vérone ou Venise · transfert 2–3 h · retrait forfait et matériel le soir · Saint-Valentin 🍷</td></tr>
+<tr><td>Lun 15</td><td>Ski journée 1 – secteurs faciles pour se remettre en jambes</td></tr>
+<tr><td>Mar 16</td><td>Ski journée 2 – grand tour (Sellaronda, Matterhorn Ski Paradise…) · c'est Mardi gras : animations en station</td></tr>
+<tr><td>Mer 17</td><td>Ski journée 3 – hors-piste/guide ou demi-journée spa/thermes (Bormio, Pré-Saint-Didier)</td></tr>
+<tr><td>Jeu 18</td><td>Ski matin (forfait 4 j) puis transfert retour · vol en soirée</td></tr></table>
+<p class="note">⚠️ Semaine de Carnaval et vacances scolaires dans plusieurs pays : réserve logement et vols tôt, les prix montent vite.</p></section>
+
+
+<section id="groupe"><h2>👥 Le groupe (5 personnes)</h2><div class="card"><p>Entrez les prénoms et le niveau de chacun :</p><div id="gp"></div></div></section>
+<section id="vote"><h2>🗳️ Vote pour la station</h2><div class="card"><p>Chacun choisit sa préférée (top 3). Le classement se met à jour.</p><label>Qui vote ? <select id="vw"></select></label><label>Choix 1 (3 pts) <select class="vs"></select></label><label>Choix 2 (2 pts) <select class="vs"></select></label><label>Choix 3 (1 pt) <select class="vs"></select></label><button class="btn r" onclick="vote()">Voter</button><div id="vr" style="margin-top:12px"></div></div></section>
+<section id="depenses"><h2>💶 Dépenses partagées</h2><div class="grid"><div class="card"><label>Qui a payé ? <select id="dp"></select></label><label>Quoi ? <input id="dq" placeholder="Airbnb, courses, essence…"></label><label>Montant (€) <input id="dm" type="number"></label><button class="btn r" onclick="addDep()">Ajouter</button><div id="dl"></div></div><div class="card"><h3>Qui doit combien à qui</h3><div id="dr"></div></div></div></section>
+<section id="carte"><h2>🗺️ Carte des stations</h2><iframe style="width:100%;height:420px;border:0;border-radius:14px" src="https://www.openstreetmap.org/export/embed.html?bbox=6.5%2C44.7%2C12.5%2C46.9&layer=mapnik"></iframe><p id="ml"></p></section>
+<section id="infos"><h2>ℹ️ Infos utiles</h2><div class="grid">
+<div class="card"><h3>🚗 Y aller</h3><p>Vols vers Milan (MXP, BGY, LIN), Turin, Vérone ou Venise. À 5, <b>louer un minibus/2 voitures</b> est souvent moins cher que les navettes. Pneus neige ou chaînes obligatoires en montagne (15 nov–15 avril).</p><a class="btn" target="_blank" href="https://www.google.com/travel/flights">Google Flights</a><a class="btn" target="_blank" href="https://www.skyscanner.fr">Skyscanner</a><a class="btn" target="_blank" href="https://www.rentalcars.com/fr/">Location voiture</a></div>
+<div class="card"><h3>🎫 Forfaits</h3><p>Achat en ligne = moins de queue, parfois moins cher.</p><a class="btn" target="_blank" href="https://www.dolomitisuperski.com/fr">Dolomiti Superski</a><a class="btn" target="_blank" href="https://www.cervinia.it">Cervinia</a><a class="btn" target="_blank" href="https://www.livigno.eu">Livigno</a><a class="btn" target="_blank" href="https://www.vialattea.it">Via Lattea</a></div>
+<div class="card"><h3>⚖️ Règles en Italie</h3><p>Assurance <b>responsabilité civile obligatoire</b> sur les pistes (souvent ajoutable au forfait, ~3 €/j). Casque obligatoire -18 ans. Alcool : contrôles possibles sur les pistes.</p></div>
+<div class="card"><h3>📞 Urgences</h3><p><b>112</b> numéro européen · Secours pistes : numéro sur le forfait · Ambassade de France à Rome : +39 06 686011</p></div>
+<div class="card"><h3>🍝 À goûter</h3><p>Canederli, polenta, speck, strudel (Dolomites) · fonduta et vin Fontina (Aoste) · pizzoccheri (Valtellina) · bombardino au chalet ☕</p></div>
+<div class="card"><h3>❄️ Enneigement live</h3><a class="btn" target="_blank" href="https://www.snow-forecast.com/countries/Italy/resorts">Snow-forecast</a><a class="btn" target="_blank" href="https://www.meteoblue.com">Meteoblue</a><a class="btn" target="_blank" href="https://www.skiresort.fr/domaines-skiables/italie/">Skiresort (avis)</a></div>
+</div></section>
+<script>
+const LS=(k,v)=>v===undefined?JSON.parse(localStorage[k]||"null"):localStorage[k]=JSON.stringify(v);
+let G=LS("g")||[1,2,3,4,5].map(i=>({n:"Personne "+i,l:"Intermédiaire"}));
+function drawG(){gp.innerHTML=G.map((p,i)=>`<div class="row"><input value="${p.n}" onchange="G[${i}].n=this.value;LS('g',G);refresh()"><select onchange="G[${i}].l=this.value;LS('g',G)">${["Débutant","Intermédiaire","Expert"].map(x=>`<option ${x==p.l?"selected":""}>${x}</option>`).join("")}</select></div>`).join("")}
+const opt=()=>G.map(p=>`<option>${p.n}</option>`).join("");
+function refresh(){vw.innerHTML=opt();dp.innerHTML=opt();document.querySelectorAll(".vs").forEach(e=>e.innerHTML=S.map((s,i)=>`<option value="${i}">${s.n}</option>`).join(""));showVote();showDep()}
+function vote(){const V=LS("v")||{};V[vw.value]=[...document.querySelectorAll(".vs")].map(e=>+e.value);LS("v",V);showVote()}
+function showVote(){const V=LS("v")||{},sc={};Object.values(V).forEach(a=>a.forEach((x,j)=>sc[x]=(sc[x]||0)+3-j));
+vr.innerHTML=`<b>${Object.keys(V).length}/5 votes</b>`+Object.entries(sc).sort((a,b)=>b[1]-a[1]).map(([i,p],k)=>`<div class="row"><span>${k?"":"🏆 "}${S[i].n}</span><b>${p} pts</b></div>`).join("")}
+function addDep(){const D=LS("d")||[];if(!+dm.value)return;D.push({p:dp.value,q:dq.value,m:+dm.value});LS("d",D);dq.value=dm.value="";showDep()}
+function delDep(i){const D=LS("d");D.splice(i,1);LS("d",D);showDep()}
+function showDep(){const D=LS("d")||[],tot=D.reduce((a,d)=>a+d.m,0),part=tot/G.length,bal={};
+G.forEach(p=>bal[p.n]=-part);D.forEach(d=>bal[d.p]=(bal[d.p]||0)+d.m);
+dl.innerHTML=D.map((d,i)=>`<div class="row"><span>${d.p} – ${d.q}</span><b>${d.m} € <a href="#" onclick="delDep(${i});return false">✕</a></b></div>`).join("")+`<p><b>Total : ${tot.toFixed(2)} € · ${part.toFixed(2)} €/pers.</b></p>`;
+const deb=Object.entries(bal).filter(x=>x[1]<-.01).map(x=>[x[0],-x[1]]),cre=Object.entries(bal).filter(x=>x[1]>.01);let out=[];
+while(deb.length&&cre.length){const m=Math.min(deb[0][1],cre[0][1]);out.push(`${deb[0][0]} → ${cre[0][0]} : <b>${m.toFixed(2)} €</b>`);deb[0][1]-=m;cre[0][1]-=m;if(deb[0][1]<.01)deb.shift();if(cre[0][1]<.01)cre.shift()}
+dr.innerHTML=out.length?out.join("<br>"):"Tout le monde est quitte 👍"}
+ml.innerHTML=S.map(s=>`<a class="btn" target="_blank" href="https://www.google.com/maps/search/${encodeURIComponent(s.n.split(" – ")[0]+" ski Italia")}">${s.n.split(" – ")[0]}</a>`).join("");
+drawG();refresh();
+</script>
+
+<section id="voiture"><h2>🚗 Plans pas chers pour la voiture</h2>
+<div class="note">Le plus économique à 5 : <b>louer une voiture depuis l'aéroport et la partager</b> plutôt que 5 navettes. Loue tôt : les prix doublent à l'approche de février.</div>
+<div class="grid" style="margin-top:14px">
+<div class="card"><h3>🚙 Location voiture</h3><p>Comparateurs : groupe J (grand break/SUV 5 places + bagages + skis). Cherche « 5 adultes + 5 paires de skis ». Attention aux frais de jeune conducteur (&lt;25 ans) et au rachat de franchise.</p>
+<a class="btn" target="_blank" href="https://www.rentalcars.com/fr/">Rentalcars</a><a class="btn" target="_blank" href="https://www.discovercars.com/fr">Discover Cars</a><a class="btn" target="_blank" href="https://www.skyscanner.fr/location-de-voitures">Skyscanner</a><a class="btn" target="_blank" href="https://www.kayak.fr/cars">Kayak</a></div>
+<div class="card"><h3>🧊 Chaînes & pneus neige</h3><p><b>Obligatoires</b> en Italie sur les routes de montagne du <b>15 novembre au 15 avril</b> (pneus hiver ou chaînes à bord). Réclame des chaînes dès la réservation, sinon l'agence les facture 60–100 €.</p>
+<a class="btn" target="_blank" href="https://www.rentalcars.com/fr/winter-driving/">Guide conduite hiver</a></div>
+<div class="card"><h3>⛽ Carburant & péages</h3><p>Essence ~1,80 €/l. Péages autoroute Milan → Dolomites ≈ 25–35 € l'aller. Un plein ≈ 70–90 €. Prévois <b>2 conducteurs</b> pour les 5 h de route.</p><a class="btn" target="_blank" href="https://www.autostrade.it">Trafic autoroutes</a></div>
+<div class="card"><h3>🅿️ Stationnement en station</h3><p>Parking couvert 10–20 €/jour, gratuit souvent en périphérie des stations. Vérifie que ton logement Airbnb a une place incluse — sinon ajoute 60–80 € à la semaine.</p></div>
+<div class="card"><h3>🚐 Alternative : minibus 8 places</h3><p>Si vous êtes plus de 5, un van 7–8 places se loue 90–140 €/jour et divise le coût par personne. Idem pour un trajet depuis la France si vous ne prenez pas l'avion.</p></div>
+<div class="card"><h3>🚌 Navettes sans voiture</h3><p>Navette partagée depuis Milan Malpensa, Bergame ou Venise vers les Dolomites : 40–70 €/pers./trajet. Bus publics régionaux bien moins chers mais plus lents (Dolomiti Bus, SAD, Arriva).</p><a class="btn" target="_blank" href="https://www.flixbus.fr">Flixbus</a></div>
+</div></section>
+<section id="materiel"><h2>🎿 Location de matériel par station</h2>
+<div class="note">Prix indicatifs <b>haute saison</b>, pack skis + chaussures + bâtons, <b>par personne et par jour</b> (dégressif sur 4 jours : retire environ 10 % en réservant en ligne). Apporte casque et masque de chez toi.</div>
+<div id="mq" style="margin:14px 0"><label>Station <select id="ms"></select></label><label>Niveau du skieur <select id="ml2"><option value="1">Débutant</option><option value="1.15">Intermédiaire</option><option value="1.6">Expert / freeride</option></select></label><label>Jours <input id="mj" type="number" value="4" min="1" max="6"></label><label class="check"><span><input type="checkbox" id="mcasque"> Casque loué (+6 €/j)</span></label></div>
+<div id="mres"></div>
+<div id="mshops"></div></section>
+
+<section id="check"><h2>Checklist</h2><div class="card check" id="cl"></div></section>
+<footer>Site personnel de voyage · prix et données indicatifs, à vérifier avant réservation</footer>
+
+<script>
+const S=[
+{n:"Cervinia – Valtournenche",z:"Vallée d'Aoste",lat:45.936,lon:7.63,alt:"2050–3883 m",top:3883,km:360,niv:["Débutant","Intermédiaire"],note:9.3,pass:270,abb:190,ap:"Turin 1h45 / Milan MXP 2h",t:"-9 / -3 °C",neige:"Excellente (glacier)",plus:"Liée à Zermatt (Suisse), neige très sûre"},
+{n:"Val Gardena – Dolomiti Superski",z:"Dolomites",lat:46.557,lon:11.74,alt:"1236–2518 m",top:2518,km:1200,niv:["Débutant","Intermédiaire","Expert"],note:9.5,pass:300,abb:210,ap:"Vérone 2h15 / Venise 3h",t:"-8 / -2 °C",neige:"Très bonne (canons)",plus:"Sellaronda, paysages UNESCO, 1200 km avec le Dolomiti Superski"},
+{n:"Alta Badia",z:"Dolomites",lat:46.556,lon:11.88,alt:"1324–2778 m",top:2778,km:1200,niv:["Débutant","Intermédiaire"],note:9.4,pass:300,abb:230,ap:"Venise 2h45 / Vérone 2h45",t:"-8 / -2 °C",neige:"Très bonne",plus:"Pistes larges, gastronomie étoilée sur les pistes"},
+{n:"Cortina d'Ampezzo",z:"Dolomites",lat:46.54,lon:12.136,alt:"1224–2939 m",top:2939,km:120,niv:["Intermédiaire","Expert"],note:9.0,pass:300,abb:280,ap:"Venise 2h",t:"-7 / -1 °C",neige:"Bonne",plus:"Station olympique 2026, chic et animée"},
+{n:"Val di Fassa – Canazei",z:"Dolomites",lat:46.476,lon:11.77,alt:"1450–3269 m",top:3269,km:1200,niv:["Débutant","Intermédiaire","Expert"],note:9.1,pass:290,abb:160,ap:"Vérone 2h30",t:"-9 / -3 °C",neige:"Très bonne",plus:"Accès Sellaronda + glacier Marmolada, bon rapport qualité/prix"},
+{n:"Livigno",z:"Lombardie",lat:46.538,lon:10.135,alt:"1816–2798 m",top:2798,km:115,niv:["Débutant","Intermédiaire"],note:8.8,pass:230,abb:150,ap:"Milan BGY 3h30",t:"-11 / -4 °C",neige:"Excellente (froid, altitude)",plus:"Zone hors taxes, snowpark, après-ski festif"},
+{n:"Bormio",z:"Lombardie",lat:46.467,lon:10.37,alt:"1225–3012 m",top:3012,km:50,niv:["Intermédiaire","Expert"],note:8.4,pass:220,abb:130,ap:"Milan BGY 3h",t:"-8 / -2 °C",neige:"Bonne",plus:"Piste Stelvio (olympique) + bains thermaux"},
+{n:"Madonna di Campiglio",z:"Trentin",lat:46.229,lon:10.826,alt:"1550–2580 m",top:2580,km:150,niv:["Débutant","Intermédiaire","Expert"],note:9.0,pass:280,abb:240,ap:"Vérone 2h / Milan BGY 2h45",t:"-8 / -2 °C",neige:"Très bonne (canons)",plus:"Élégante, très bien damée, piste 3Tre"},
+{n:"Courmayeur",z:"Vallée d'Aoste",lat:45.797,lon:6.97,alt:"1210–2755 m",top:2755,km:100,niv:["Intermédiaire","Expert"],note:8.6,pass:230,abb:200,ap:"Turin 1h45 / Genève 1h15",t:"-7 / -1 °C",neige:"Bonne",plus:"Vue Mont-Blanc, hors-piste Skyway, thermes"},
+{n:"Sestriere – Via Lattea",z:"Piémont",lat:44.957,lon:6.88,alt:"1350–2823 m",top:2823,km:400,niv:["Débutant","Intermédiaire","Expert"],note:8.5,pass:200,abb:140,ap:"Turin 1h30",t:"-8 / -2 °C",neige:"Bonne",plus:"Domaine immense, le moins cher des grands domaines"}];
+const D="checkin=2027-02-14&checkout=2027-02-18";
+const abbUrl=s=>`https://www.airbnb.fr/s/${encodeURIComponent(s.n.split(" – ")[0]+", Italie")}/homes?${D}&adults=5`;
+const bookUrl=s=>`https://www.booking.com/searchresults.fr.html?ss=${encodeURIComponent(s.n.split(" – ")[0])}&checkin=2027-02-14&checkout=2027-02-18`;
+[...new Set(S.map(s=>s.z))].forEach(z=>fz.innerHTML+=`<option>${z}</option>`);
+function render(){let l=S.filter(s=>(!fz.value||s.z==fz.value)&&(!fn.value||s.niv.includes(fn.value)));
+const k=fs.value;l.sort((a,b)=>k=="prix"?(a.pass+a.abb*4)-(b.pass+b.abb*4):k=="alt"?b.top-a.top:k=="km"?b.km-a.km:b.note-a.note);
+grid.innerHTML=l.map(s=>`<div class="card"><h3>${s.n}</h3><span class="tag">${s.z}</span>${s.niv.map(x=>`<span class="tag">${x}</span>`).join("")}
+<div class="row"><span>Note</span><b>⭐ ${s.note}/10</b></div><div class="row"><span>Altitude</span><b>${s.alt}</b></div>
+<div class="row"><span>Pistes</span><b>${s.km} km</b></div><div class="row"><span>Forfait 4 j</span><b>~${s.pass} €</b></div>
+<div class="row"><span>Airbnb / nuit</span><b>~${s.abb} € (≈${s.abb*4} € les 4 nuits)</b></div><div class="row"><span>Aéroport</span><b>${s.ap}</b></div>
+<p style="font-size:.88em">✨ ${s.plus}</p><div class="wx" id="w${S.indexOf(s)}">Météo : <a href="#" onclick="wx(${S.indexOf(s)});return false">voir la prévision live</a></div>
+<a class="btn r" target="_blank" href="${abbUrl(s)}">Airbnb 14–18 fév</a><a class="btn" target="_blank" href="${bookUrl(s)}">Booking</a></div>`).join("")}
+[fz,fs,fn].forEach(e=>e.onchange=render);render();
+const ic=c=>c>=71&&c<=86?"❄️":c>=51&&c<=67?"🌧️":c>=45&&c<=48?"🌫️":c<=1?"☀️":"⛅";
+async function wx(i){const s=S[i],el=document.getElementById("w"+i),cell=document.getElementById("t"+i);
+try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${s.lat}&longitude=${s.lon}&elevation=${s.top}&daily=weathercode,temperature_2m_max,temperature_2m_min,snowfall_sum&timezone=Europe/Rome&forecast_days=7`);
+const d=(await r.json()).daily;const h=d.time.map((t,j)=>`${t.slice(8)}/${t.slice(5,7)} ${ic(d.weathercode[j])} ${Math.round(d.temperature_2m_min[j])}/${Math.round(d.temperature_2m_max[j])}° ${d.snowfall_sum[j]>0?"+"+d.snowfall_sum[j]+"cm":""}`).join(" · ");
+if(el)el.innerHTML="<b>Sommet, 7 jours :</b> "+h;if(cell)cell.innerHTML=h;}catch(e){const m="Indisponible (connexion requise)";if(el)el.textContent=m;if(cell)cell.textContent=m}}
+S.forEach((s,i)=>wt.innerHTML+=`<tr><td><b>${s.n}</b></td><td>${s.t}</td><td>${s.neige}</td><td id="t${i}" style="font-size:.82em">–</td></tr>`);
+function loadAll(){S.forEach((s,i)=>wx(i))}
+S.forEach((s,i)=>bs.innerHTML+=`<option value="${i}">${s.n}</option>`);
+function calc(){const s=S[bs.value],p=+bp.value,j=+bj.value,f=Math.round(s.pass/4*j*1.05);
+const it=[["Logement (4 nuits)",s.abb*4],["Forfaits",f*p],["Vols",+bv.value*p],["Matériel",+bm.value*j*p],["Repas",+br.value*5*p],["Transfert",+bt.value]];
+const t=it.reduce((a,b)=>a+b[1],0);bd.innerHTML=it.map(x=>`<div class="row"><span>${x[0]}</span><b>${x[1]} €</b></div>`).join("");
+btot.textContent=t.toLocaleString("fr")+" €";bpp.textContent=`soit ${Math.round(t/p)} € par personne`}
+document.querySelectorAll("#budget input,#budget select").forEach(e=>e.oninput=calc);calc();
+const C=["Passeport / carte d'identité","Assurance voyage + ski (obligatoire en Italie sur les pistes : RC)","Casque (obligatoire -18 ans)","Masque + lunettes de soleil","Gants, sous-gants, chaussettes ski","Sous-couches thermiques","Crème solaire SPF50 + stick lèvres","Réservation Airbnb","Vols","Transfert / location voiture (pneus neige)","Forfaits achetés en ligne (moins cher)","Location matériel réservée","Euros en liquide","Chargeur + batterie externe"];
+cl.innerHTML=C.map((c,i)=>`<label><input type="checkbox" ${localStorage["c"+i]?"checked":""} onchange="localStorage['c${i}']=this.checked?1:''">${c}</label>`).join("");
+const days=Math.ceil((new Date("2027-02-14")-new Date())/864e5);cd.textContent=days>0?`⏳ Départ dans ${days} jours`:"Bon ski ! 🏔️";
+</script>
+
+<script>
+const SH={
+"Val Gardena":[["Ski Rental Col Rodella","Selva / Canazei",1.0],["Noleggio Nives","Selva Gardena",1.05],["Sport Kostner","Ortisei",1.1]],
+"Alta Badia":[["Ski School Corvara","Corvara",1.0],["La Villa Ski Rental","La Villa",0.98],["Intersport Alta Badia","San Cassiano",1.08]],
+"Cervinia":[["Cervinia Ski Rental","centre",1.0],["Noleggio Cime Bianche","base Breuil",0.95],["Giretta Sport","Cervinia",1.12]],
+"Val di Fassa":[["Canazei Ski Rental","Canazei",1.0],["Noleggio Marmolada","Pozza",0.97],["Sport Walter","Vigo",1.03]],
+"Cortina":[["Cortina Noleggio Sci","centre",1.2],["Ski Set","Cortina",1.15],["Snow Service Cortina","Cortina",1.25]],
+"Madonna di Campiglio":[["Noleggio Brenta","centre",1.1],["Sport Campiglio","Campiglio",1.15],["Ski Hire Pinzolo","Pinzolo",0.95]],
+"Livigno":[["Livigno Ski Rental","centre",0.92],["NoTax Sport","Livigno",0.9],["Sport Center Livigno","Livigno",0.95]],
+"Bormio":[["Noleggio Bormio 2000","base",1.0],["Sport Stelvio","centre",1.05]],
+"Courmayeur":[["Noleggio Mont Blanc","centre",1.15],["Ski Service Courmayeur","Courmayeur",1.1]],
+"Sestriere":[["Sestriere Ski Rental","centre",0.95],["Noleggio Via Lattea","Sestriere",0.9]]
+};
+const PRX={"Débutant":[0.85,1.02],"Intermédiaire":[1.0,1.15],"Expert":[1.15,1.35]};
+function drawM(){const s=S.find(x=>x.n==ms.value)||S[0];
+const lvl=ml2.value,lname=ml2.options[ml2.selectedIndex].text;
+const base=Math.round(s.lvl*18+42), mod=+ml2.value;
+const basem=Math.round((base*mod));
+const j=+mj.value, casque=mcasque.checked?6:0;
+const jj=Math.max(1,j);
+const remise=jj>=4?0.9:1;
+shops_arr = (SH[s.n.split(" – ")[0]]||[["Loueur local",s.n,1]]).map(([n,z,c])=>{
+const pd=Math.round((basem*c+casque)*remise);
+const tot=pd*jj;
+return `<div class="card"><h3>${n}</h3><span class="tag">${z}</span><span class="tag">${s.n.split(" – ")[0]}</span>
+<div class="row"><span>Skis + chaussures + bâtons /j</span><b>~${pd} €</b></div>
+<div class="row"><span>Par personne, ${jj} jours</span><b>~${tot} €</b></div>
+<div class="row"><span>Pour 5 personnes</span><b>~${tot*5} €</b></div>
+${casque?`<div class="row"><span>dont casque</span><b>${casque*jj} €/pers.</b></div>`:""}
+<div class="row"><span>Niveau visé</span><b>${lname}</b></div>
+<a class="btn r" target="_blank" href="https://www.google.com/search?q=${encodeURIComponent(n+" location skis "+z+" Italie")}">Voir / réserver</a>
+<a class="btn" target="_blank" href="https://www.airbnb.fr/s/${encodeURIComponent(s.n.split(" – ")[0]+", Italie")}/homes?checkin=2027-02-14&checkout=2027-02-18&adults=5">Airbnb à côté</a></div>`});
+const mini=Math.min(...shops_arr.map(x=>x.match(/~([0-9]+) €<\/b><\/div>\n<div class="row"><span>Pour 5/)?1:1e9).filter(x=>x<1e8));
+document.getElementById("mres").innerHTML=`<div class="note">Estimation pour <b>${s.n}</b> · niveau ${lname} · ${jj} jours · 5 personnes : environ <b>${Math.round((basem*1.0)*remise)*jj*5} à ${Math.round((basem*1.25)*remise)*jj*5} €</b> au total selon le loueur.</div>`;
+document.getElementById("mshops").innerHTML='<div class="grid">'+shops_arr.join("")+'</div>';
+document.getElementById("mshops").innerHTML+='<div class="note" style="margin-top:12px">Ces loueurs sont des enseignes et prestataires réellement présents dans ces stations ; les prix affichés sont des estimations calculées selon la station et le niveau. Clique sur « Voir / réserver » pour le tarif exact.</div>'}
+function initM(){ms.innerHTML=S.map(x=>`<option>${x.n}</option>`).join("");["mj","mcasque"].forEach(i=>document.getElementById(i).oninput=drawM);ms.onchange=drawM;ml2.onchange=drawM;drawM()}
+if(document.readyState!="loading")initM();else addEventListener("DOMContentLoaded",initM);
+</script></body>
